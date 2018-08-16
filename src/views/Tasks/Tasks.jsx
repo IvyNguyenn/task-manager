@@ -112,7 +112,7 @@ class Tasks extends Component {
         }
 
         return (
-            <div className="container" style={{ width: "60%" }}>
+            <div className="container">
                 <Control
                     onToggleTaskModal={this.onToggleTaskModal}
                     onDeleteTask={this.onDeleteTask}

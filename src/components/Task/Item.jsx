@@ -36,7 +36,7 @@ class Item extends Component {
                     />
                 </td>
                 <td className="td-actions text-center">
-                    <button
+                    {/* <button
                         className="btn btn-info btn-sm btn-round btn-icon"
                         data-container="body"
                         data-toggle="popover"
@@ -44,7 +44,7 @@ class Item extends Component {
                         data-content="Coming soon"
                     >
                         <i className="now-ui-icons users_single-02" />
-                    </button>
+                    </button> */}
                     <button
                         className="btn btn-success btn-sm btn-round btn-icon"
                         onClick={this.onSelectTask}
@@ -72,15 +72,11 @@ const BadgeStatus = props => {
             <div className="dropdown">
                 <label
                     className={`badge badge-${statusClass[index]}`}
-                    style={{
-                        borderTopRightRadius: 0,
-                        borderBottomRightRadius: 0
-                    }}
                     onClick={props.onToggleTaskStatus}
                 >
                     {props.status}
                 </label>
-                <label
+                {/* <label
                     className={`badge badge-${
                         statusClass[index]
                     } dropdown-toggle`}
@@ -91,7 +87,7 @@ const BadgeStatus = props => {
                     }}
                 >
                     <span className="caret" />
-                </label>
+                </label> */}
                 <div className="dropdown-menu" onChange={props.onChange}>
                     <StatusItem onSelectStatus={props.onSelectStatus} />
                 </div>
