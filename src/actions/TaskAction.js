@@ -33,3 +33,11 @@ export const toggleTaskStatus = id => {
         id
     };
 };
+
+export const setTaskStatus = (id, status) => {
+    return {
+        type: Types.SET_TASK_STATUS,
+        id,
+        status
+    };
+};

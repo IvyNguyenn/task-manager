@@ -34,6 +34,10 @@ let reducer = (state = initialState, action) => {
             else state[indexTask].status = statuses[indexStatus + 1];
             saveToLocalStorage(state);
             return [...state];
+        case Types.SET_TASK_STATUS:
+            index = state.findIndex(i => i.id === action.id);
+            state[index].status = action.status;
+            return [...state];
         default:
             return [...state];
     }

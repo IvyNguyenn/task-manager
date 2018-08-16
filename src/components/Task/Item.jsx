@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { statuses, statusClass } from "../../constrains/StatusTask";
 
 class Item extends Component {
+    onSelectStatus = status => {
+        this.props.onSetTaskStatus(this.props.task.id, status);
+    };
+
     onDeleteTask = () => {
         this.props.onDeleteTask(null, this.props.task);
     };
@@ -28,6 +32,7 @@ class Item extends Component {
                     <BadgeStatus
                         status={task.status}
                         onToggleTaskStatus={this.onToggleTaskStatus}
+                        onSelectStatus={this.onSelectStatus}
                     />
                 </td>
                 <td className="td-actions text-center">
@@ -63,11 +68,47 @@ export default Item;
 const BadgeStatus = props => {
     let index = statuses.indexOf(props.status);
     return (
-        <label
-            className={`badge badge-${statusClass[index]}`}
-            onClick={props.onToggleTaskStatus}
-        >
-            {props.status}
-        </label>
+        <div>
+            <div className="dropdown">
+                <label
+                    className={`badge badge-${statusClass[index]}`}
+                    style={{
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0
+                    }}
+                    onClick={props.onToggleTaskStatus}
+                >
+                    {props.status}
+                </label>
+                <label
+                    className={`badge badge-${
+                        statusClass[index]
+                    } dropdown-toggle`}
+                    data-toggle="dropdown"
+                    style={{
+                        borderTopLeftRadius: 0,
+                        borderBottomLeftRadius: 0
+                    }}
+                >
+                    <span className="caret" />
+                </label>
+                <div className="dropdown-menu" onChange={props.onChange}>
+                    <StatusItem onSelectStatus={props.onSelectStatus} />
+                </div>
+            </div>
+        </div>
     );
 };
+
+const StatusItem = props =>
+    statuses.map((status, index) => {
+        return (
+            <div
+                className="dropdown-item"
+                key={index}
+                onClick={() => props.onSelectStatus(status)}
+            >
+                {status}
+            </div>
+        );
+    });

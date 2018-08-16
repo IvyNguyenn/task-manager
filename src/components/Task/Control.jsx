@@ -86,22 +86,23 @@ class Control extends Component {
                         </div>
                     </div>
                 </form>
-                <div hidden={!isShowFabMenu} className="cf-inspector-edit-menu">
-                    <button
-                        className="btn btn-danger btn-icon btn-round "
-                        onClick={this.onDeleteTask}
-                    >
-                        <i className="now-ui-icons ui-1_simple-delete" />
-                    </button>
-                    <button
-                        className="btn btn-success btn-icon btn-round "
-                        onClick={this.onToggleModal}
-                    >
-                        <i className="now-ui-icons ui-1_simple-add" />
-                    </button>
-                </div>
+
                 <div className="cf-inspector-edit">
                     {/* fab menu */}
+                    <div hidden={!isShowFabMenu}>
+                        <button
+                            className="btn btn-danger btn-icon btn-round "
+                            onClick={this.onDeleteTask}
+                        >
+                            <i className="now-ui-icons ui-1_simple-delete" />
+                        </button>
+                        <button
+                            className="btn btn-success btn-icon btn-round "
+                            onClick={this.onToggleModal}
+                        >
+                            <i className="now-ui-icons ui-1_simple-add" />
+                        </button>
+                    </div>
                     <button
                         className="btn btn-primary btn-icon btn-round"
                         onClick={this.onToggleFabMenu}

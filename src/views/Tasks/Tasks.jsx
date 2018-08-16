@@ -9,7 +9,8 @@ import {
     deleteTask,
     deleteAllTask,
     updateTask,
-    toggleTaskStatus
+    toggleTaskStatus,
+    setTaskStatus
 } from "../../actions/TaskAction";
 import { filterTask } from "../../actions/FilterAction";
 import DeleteModal from "../../components/Modal/DeleteModal";
@@ -68,6 +69,10 @@ class Tasks extends Component {
         this.props.onToggleTaskStatus(id);
     };
 
+    onSetTaskStatus = (id, status) => {
+        this.props.onSetTaskStatus(id, status);
+    };
+
     onFilterTask = filter => {
         this.props.onFilterTask(filter);
     };
@@ -119,6 +124,7 @@ class Tasks extends Component {
                         onDeleteTask={this.onDeleteTask}
                         onSelectTask={this.onSelectTask}
                         onToggleTaskStatus={this.onToggleTaskStatus}
+                        onSetTaskStatus={this.onSetTaskStatus}
                     />
                 </List>
                 <Pagination />
@@ -147,6 +153,7 @@ const Items = props =>
                 onDeleteTask={props.onDeleteTask}
                 onSelectTask={props.onSelectTask}
                 onToggleTaskStatus={props.onToggleTaskStatus}
+                onSetTaskStatus={props.onSetTaskStatus}
             />
         );
     });
@@ -165,7 +172,8 @@ const mapDispatchToProps = dispatch => {
         onDeleteAllTask: () => dispatch(deleteAllTask()),
         onUpdateTask: task => dispatch(updateTask(task)),
         onToggleTaskStatus: id => dispatch(toggleTaskStatus(id)),
-        onFilterTask: filter => dispatch(filterTask(filter))
+        onFilterTask: filter => dispatch(filterTask(filter)),
+        onSetTaskStatus: (id, status) => dispatch(setTaskStatus(id, status))
     };
 };
 
