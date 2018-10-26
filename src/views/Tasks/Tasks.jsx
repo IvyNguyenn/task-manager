@@ -91,12 +91,9 @@ class Tasks extends Component {
 
     onSubmitTask = task => {
         if (task.id) {
-            this.props.onUpdateTask(task);
             this.updateDB(task);
         } else {
-            this.props.onAddTask(task);
-            console.log(task);
-            //this.addDB(task);
+            this.addDB(task);
         }
     };
 
@@ -117,14 +114,13 @@ class Tasks extends Component {
             if (isDeleteAllTask) this.props.onDeleteAllTask();
             else {
                 this.removeDB(task);
-                this.props.onDeleteTask(task.id);
             }
         }
         this.setState({ deleteTask: undefined });
     };
 
     onToggleTaskStatus = id => {
-        this.props.onToggleTaskStatus(id);
+        //this.props.onToggleTaskStatus(id);
     };
 
     onSetTaskStatus = (id, status) => {
@@ -141,7 +137,6 @@ class Tasks extends Component {
 
     componentDidMount() {
         this.listenForItems();
-        this.props.onFetchTasks();
     }
 
     render() {
@@ -152,10 +147,9 @@ class Tasks extends Component {
             keyword,
             taskList
         } = this.state;
-        const { tasks, filter } = this.props;
+        const { filter } = this.props;
         // Filter on tasks
-        let filterTasks = [...tasks];
-        //let filterTasks = [...taskList];
+        let filterTasks = [...taskList];
         if (filter.title) {
             filterTasks = filterTasks.filter(
                 i =>
@@ -235,20 +229,17 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onFetchTasks: () => dispatch(fetchTasksFirebase()),
-        onAddTask: task => dispatch(addTask(task)),
-        onDeleteTask: id => dispatch(deleteTask(id)),
-        onDeleteAllTask: () => dispatch(deleteAllTask()),
-        onUpdateTask: task => dispatch(updateTask(task)),
-        onToggleTaskStatus: id => dispatch(toggleTaskStatus(id)),
-        onFilterTask: filter => dispatch(filterTask(filter)),
-        onSetTaskStatus: (id, status) => dispatch(setTaskStatus(id, status))
-    };
-};
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         onFetchTasks: () => dispatch(fetchTasksFirebase()),
+//         onAddTask: task => dispatch(addTask(task)),
+//         onDeleteTask: id => dispatch(deleteTask(id)),
+//         onDeleteAllTask: () => dispatch(deleteAllTask()),
+//         onUpdateTask: task => dispatch(updateTask(task)),
+//         onToggleTaskStatus: id => dispatch(toggleTaskStatus(id)),
+//         onFilterTask: filter => dispatch(filterTask(filter)),
+//         onSetTaskStatus: (id, status) => dispatch(setTaskStatus(id, status))
+//     };
+// };
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Tasks);
+export default connect(mapStateToProps)(Tasks);
