@@ -7,6 +7,9 @@ const initialState = data ? data : [];
 let reducer = (state = initialState, action) => {
     let index;
     switch (action.type) {
+        case Types.FETCH_TASKS:
+            console.log(action.tasks);
+            return [...action.tasks];
         case Types.ADD_TASK:
             action.task.id = getId();
             state.push(action.task);

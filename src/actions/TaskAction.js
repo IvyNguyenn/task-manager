@@ -1,4 +1,20 @@
 import * as Types from "../constrains/ActionTypes";
+import { fetchDB } from "../components/util/firebaseCaller";
+
+export const fetchTasksFirebase = () => {
+    return dispatch => {
+        return fetchDB().then(res => {
+            dispatch(fetchTasks(res));
+        });
+    };
+};
+
+export const fetchTasks = tasks => {
+    return {
+        type: Types.FETCH_TASKS,
+        tasks
+    };
+};
 
 export const addTask = task => {
     return {

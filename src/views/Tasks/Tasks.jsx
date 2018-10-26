@@ -10,12 +10,14 @@ import {
     deleteAllTask,
     updateTask,
     toggleTaskStatus,
-    setTaskStatus
+    setTaskStatus,
+    fetchTasksFirebase
 } from "../../actions/TaskAction";
 import { filterTask } from "../../actions/FilterAction";
 import DeleteModal from "../../components/Modal/DeleteModal";
 import Pagination from "../../components/Pagination/Pagination";
 import * as Status from "../../constrains/StatusTask";
+import { firebaseApp } from "../../constrains/firebaseConfig";
 
 class Tasks extends Component {
     constructor(props) {
@@ -25,10 +27,60 @@ class Tasks extends Component {
             deleteTask: undefined,
             isDeleteAllTask: false,
             selectTask: undefined,
-            keyword: ""
+            keyword: "",
+            taskList: []
         };
+        this.itemRef = firebaseApp.database();
     }
 
+    addDB = task => {
+        this.itemRef.ref("task").push({
+            title: task.title,
+            content: task.content,
+            status: task.status
+        });
+    };
+    removeDB = task => {
+        this.itemRef
+            .ref("task")
+            .child(task.id)
+            .remove();
+        this.listenForItems();
+    };
+    updateDB = task => {
+        this.itemRef
+            .ref("task")
+            .child(task.id)
+            .update({
+                title: task.title,
+                content: task.content,
+                status: task.status
+            });
+        this.listenForItems();
+    };
+    listenForItems = () => {
+        let tasks = [];
+        this.itemRef.ref("task").on("child_added", dataSnapshot => {
+            tasks.push({
+                id: dataSnapshot.key,
+                title: dataSnapshot.val().title,
+                content: dataSnapshot.val().content,
+                status: dataSnapshot.val().status
+            });
+            this.setState({ taskList: tasks });
+        });
+        this.itemRef.ref("task").on("child_removed", dataSnapshot => {
+            tasks = tasks.filter(i => i.id !== dataSnapshot.key);
+            this.setState({ taskList: tasks });
+        });
+        this.itemRef.ref("task").on("child_changed", dataSnapshot => {
+            let index = tasks.findIndex(i => i.id === dataSnapshot.key);
+            (tasks[index].title = dataSnapshot.val().title),
+                (tasks[index].content = dataSnapshot.val().content),
+                (tasks[index].status = dataSnapshot.val().status);
+            this.setState({ taskList: tasks });
+        });
+    };
     onToggleTaskModal = () => {
         this.setState({
             isTaskModalOpen: !this.state.isTaskModalOpen,
@@ -40,8 +92,10 @@ class Tasks extends Component {
     onSubmitTask = task => {
         if (task.id) {
             this.props.onUpdateTask(task);
+            this.updateDB(task);
         } else {
             this.props.onAddTask(task);
+            this.addDB(task);
         }
     };
 
@@ -60,7 +114,10 @@ class Tasks extends Component {
         let { isDeleteAllTask } = this.state;
         if (task) {
             if (isDeleteAllTask) this.props.onDeleteAllTask();
-            else this.props.onDeleteTask(task.id);
+            else {
+                this.removeDB(task);
+                this.props.onDeleteTask(task.id);
+            }
         }
         this.setState({ deleteTask: undefined });
     };
@@ -80,6 +137,11 @@ class Tasks extends Component {
     onSearchTask = keyword => {
         this.setState({ keyword });
     };
+
+    componentDidMount() {
+        //this.listenForItems();
+        this.props.onFetchTasks();
+    }
 
     render() {
         const { isTaskModalOpen, deleteTask, selectTask, keyword } = this.state;
@@ -167,6 +229,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        onFetchTasks: () => dispatch(fetchTasksFirebase()),
         onAddTask: task => dispatch(addTask(task)),
         onDeleteTask: id => dispatch(deleteTask(id)),
         onDeleteAllTask: () => dispatch(deleteAllTask()),
