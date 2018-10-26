@@ -95,7 +95,8 @@ class Tasks extends Component {
             this.updateDB(task);
         } else {
             this.props.onAddTask(task);
-            this.addDB(task);
+            console.log(task);
+            //this.addDB(task);
         }
     };
 
@@ -139,15 +140,22 @@ class Tasks extends Component {
     };
 
     componentDidMount() {
-        //this.listenForItems();
+        this.listenForItems();
         this.props.onFetchTasks();
     }
 
     render() {
-        const { isTaskModalOpen, deleteTask, selectTask, keyword } = this.state;
+        const {
+            isTaskModalOpen,
+            deleteTask,
+            selectTask,
+            keyword,
+            taskList
+        } = this.state;
         const { tasks, filter } = this.props;
         // Filter on tasks
         let filterTasks = [...tasks];
+        //let filterTasks = [...taskList];
         if (filter.title) {
             filterTasks = filterTasks.filter(
                 i =>

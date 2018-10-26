@@ -8,8 +8,7 @@ let reducer = (state = initialState, action) => {
     let index;
     switch (action.type) {
         case Types.FETCH_TASKS:
-            console.log(action.tasks);
-            return [...action.tasks];
+            return [...state];
         case Types.ADD_TASK:
             action.task.id = getId();
             state.push(action.task);
@@ -20,7 +19,6 @@ let reducer = (state = initialState, action) => {
             saveToLocalStorage(state);
             return [...state];
         case Types.DELETE_ALL_TASK:
-            console.log("Delete all");
             state = [];
             localStorage.removeItem("TASKS");
             return [...state];
